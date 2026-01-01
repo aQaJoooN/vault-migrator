@@ -60,7 +60,7 @@ func main() {
 	failCount := 0
 
 	for username, password := range users {
-		updated := false
+		foundCount := 0
 		
 		for _, authMethod := range authMethods {
 			userPath := fmt.Sprintf("auth/%s/users/%s/password", authMethod, username)
@@ -72,13 +72,16 @@ func main() {
 			_, err := client.Logical().Write(userPath, data)
 			if err == nil {
 				fmt.Printf("✓ Updated %s in %s\n", username, authMethod)
-				updated = true
-				successCount++
-				break
+				foundCount++
 			}
 		}
 
-		if !updated {
+		if foundCount > 0 {
+			successCount++
+			if foundCount > 1 {
+				fmt.Printf("  → Updated in %d auth methods\n", foundCount)
+			}
+		} else {
 			fmt.Printf("✗ Failed to update %s (user not found in any auth method)\n", username)
 			failCount++
 		}
