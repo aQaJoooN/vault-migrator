@@ -1,0 +1,7 @@
+vault-migrator
+vault-migrator.exe
+*.json
+!go.mod
+!go.sum
+.env
+*.backup
