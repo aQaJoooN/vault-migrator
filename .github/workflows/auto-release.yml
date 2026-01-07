@@ -40,23 +40,23 @@ jobs:
           go mod download
           
           # Linux AMD64
-          GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o vault-migrator-linux-amd64 .
+          GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o vault-migrator-linux-amd64 ./main.go
           GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o update-passwords-linux-amd64 ./update-passwords.go
 
           # Linux ARM64
-          GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o vault-migrator-linux-arm64 .
+          GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o vault-migrator-linux-arm64 ./main.go
           GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o update-passwords-linux-arm64 ./update-passwords.go
 
           # macOS AMD64
-          GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o vault-migrator-darwin-amd64 .
+          GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o vault-migrator-darwin-amd64 ./main.go
           GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o update-passwords-darwin-amd64 ./update-passwords.go
 
           # macOS ARM64 (Apple Silicon)
-          GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o vault-migrator-darwin-arm64 .
+          GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o vault-migrator-darwin-arm64 ./main.go
           GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o update-passwords-darwin-arm64 ./update-passwords.go
 
           # Windows AMD64
-          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o vault-migrator-windows-amd64.exe .
+          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o vault-migrator-windows-amd64.exe ./main.go
           GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o update-passwords-windows-amd64.exe ./update-passwords.go
 
       - name: Create checksums
@@ -85,5 +85,6 @@ jobs:
             checksums.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
 
