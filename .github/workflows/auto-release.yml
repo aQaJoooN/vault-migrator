@@ -38,23 +38,23 @@ jobs:
         run: |
           # Linux AMD64
           GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o vault-migrator-linux-amd64 ./main.go
-          GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o update-password-linux-amd64 ./update-password.go
+          GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o update-passwords-linux-amd64 ./update-passwords.go
 
           # Linux ARM64
           GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o vault-migrator-linux-arm64 ./main.go
-          GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o update-password-linux-arm64 ./update-password.go
+          GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o update-passwords-linux-arm64 ./update-passwords.go
 
           # macOS AMD64
           GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o vault-migrator-darwin-amd64 ./main.go
-          GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o update-password-darwin-amd64 ./update-password.go
+          GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o update-passwords-darwin-amd64 ./update-passwords.go
 
           # macOS ARM64 (Apple Silicon)
           GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o vault-migrator-darwin-arm64 ./main.go
-          GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o update-password-darwin-arm64 ./update-password.go
+          GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o update-passwords-darwin-arm64 ./update-passwords.go
 
           # Windows AMD64
           GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o vault-migrator-windows-amd64.exe ./main.go
-          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o update-password-windows-amd64.exe ./update-password.go
+          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o update-passwords-windows-amd64.exe ./update-passwords.go
 
       - name: Create checksums
         if: steps.tag_version.outputs.new_tag
@@ -74,12 +74,13 @@ jobs:
             vault-migrator-darwin-amd64
             vault-migrator-darwin-arm64
             vault-migrator-windows-amd64.exe
-            update-password-linux-amd64
-            update-password-linux-arm64
-            update-password-darwin-amd64
-            update-password-darwin-arm64
-            update-password-windows-amd64.exe
+            update-passwords-linux-amd64
+            update-passwords-linux-arm64
+            update-passwords-darwin-amd64
+            update-passwords-darwin-arm64
+            update-passwords-windows-amd64.exe
             checksums.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
