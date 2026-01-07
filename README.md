@@ -156,10 +156,10 @@ Flags:
 ## Troubleshooting
 
 **"Permission denied" errors**: Ensure your token has sufficient permissions
-
 **"Mount already exists" warnings**: The tool will skip creating existing mounts and restore data to them
 
 **Missing secrets after restore**: Check that the secret engine paths match between old and new Vault
 
 **Version mismatches**: The tool handles both KV v1 and v2, but ensure your new Vault supports the same versions
+
 
