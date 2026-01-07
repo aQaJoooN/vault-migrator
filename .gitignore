@@ -5,3 +5,4 @@ vault-migrator.exe
 !go.sum
 .env
 *.backup
+update-passwords.exe
