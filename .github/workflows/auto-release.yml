@@ -1,0 +1,74 @@
+name: Auto Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  tag-and-release:
+    name: Tag and Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: false
+          release_branches: main
+          pre_release_branches: develop
+
+      - name: Set up Go
+        if: steps.tag_version.outputs.new_tag
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Build binaries
+        if: steps.tag_version.outputs.new_tag
+        run: |
+          # Linux AMD64
+          GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o vault-migrator-linux-amd64 ./cmd
+          
+          # Linux ARM64
+          GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o vault-migrator-linux-arm64 ./cmd
+          
+          # macOS AMD64
+          GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o vault-migrator-darwin-amd64 ./cmd
+          
+          # macOS ARM64 (Apple Silicon)
+          GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o vault-migrator-darwin-arm64 ./cmd
+          
+          # Windows AMD64
+          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o vault-migrator-windows-amd64.exe ./cmd
+
+      - name: Create checksums
+        if: steps.tag_version.outputs.new_tag
+        run: |
+          sha256sum vault-migrator-* > checksums.txt
+
+      - name: Create Release
+        if: steps.tag_version.outputs.new_tag
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+          files: |
+            vault-migrator-linux-amd64
+            vault-migrator-linux-arm64
+            vault-migrator-darwin-amd64
+            vault-migrator-darwin-arm64
+            vault-migrator-windows-amd64.exe
+            checksums.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
